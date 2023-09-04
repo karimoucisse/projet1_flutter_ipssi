@@ -1,4 +1,5 @@
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firstbd233/controller/my_animation.dart';
 import 'package:firstbd233/view/my_background.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -41,6 +42,105 @@ class _MyHomePageState extends State<MyHomePage> {
   //variable
   PageController page = PageController();
   int position = 0;
+  bool eyeOpen = true;
+
+
+  //méthode
+  SnackBar barAction(){
+    return SnackBar(
+      backgroundColor: Colors.purple,
+      duration: const Duration(minutes: 5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15))
+
+        ),
+
+
+        content: Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: Column(
+            children: [
+              SizedBox(height: 10,),
+              TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(Icons.person),
+
+                    hintText: "Entrer votre prénom",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)
+                    )
+                ),
+
+              ),
+              SizedBox(height: 10,),
+              TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(Icons.person),
+                    hintText: "Entrer votre nom",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)
+                    )
+                ),
+
+              ),
+              SizedBox(height: 10,),
+              TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(Icons.mail),
+
+                    hintText: "Entrer votre adresse mail",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)
+                    )
+                ),
+
+              ),
+              SizedBox(height: 10,),
+              TextField(
+                obscureText: eyeOpen,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      onPressed: (){
+                        setState(() {
+                          eyeOpen = !eyeOpen;
+                        });
+
+                      },
+                      icon: Icon(Icons.remove_red_eye),
+                    ),
+                    hintText: "Entrer votre mot de passe",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)
+                    )
+                ),
+
+              ),
+              SizedBox(height: 10,),
+              ElevatedButton(
+                  onPressed: (){
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    //enregistrer dans la base de donnée
+                  },
+                  child: Text("Enregistrement")
+              ),
+
+            ],
+          ),
+        )
+    );
+  }
 
 
   @override
@@ -78,14 +178,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         Center(child: Lottie.asset("assets/01.json")),
                         Center(child: Lottie.asset("assets/02.json")),
-                        Center(child: Lottie.asset("assets/03.json"))
+                        Center(child: Lottie.asset("assets/03.json")),
+                        bodyPage(),
                       ],
                     ),
                   ),
-                  DotsIndicator(
+                  (position == 3)?Container():DotsIndicator(
 
                     position: position,
-                      dotsCount: 3
+                      dotsCount: 4
                   )
                 ],
               ),
@@ -97,4 +198,75 @@ class _MyHomePageState extends State<MyHomePage> {
 
     );
   }
+
+
+  Widget bodyPage(){
+    return Column(
+      children: [
+        SizedBox(height: 10,),
+        MyAnimationWidget(
+          duree: 1,
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: "Entrer votre mail",
+              prefixIcon: Icon(Icons.mail),
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15)
+              )
+            ),
+          ),
+        ),
+        SizedBox(height: 10,),
+        MyAnimationWidget(
+          duree: 2,
+          child: TextField(
+            obscureText: eyeOpen,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  onPressed: (){
+                    setState(() {
+                      eyeOpen = !eyeOpen;
+                    });
+
+                },
+                  icon: Icon(Icons.remove_red_eye),
+                ),
+                hintText: "Entrer votre mot de passe",
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15)
+                )
+            ),
+
+          ),
+        ),
+        SizedBox(height: 10,),
+        MyAnimationWidget(
+          duree: 3,
+          child: ElevatedButton(
+              onPressed: (){
+
+              },
+              child: Text("Connexion")
+          ),
+        ),
+        SizedBox(height: 10,),
+        MyAnimationWidget(
+          duree: 4,
+          child: TextButton(
+              onPressed: (){
+                ScaffoldMessenger.of(context).showSnackBar(barAction());
+              },
+              child: Text("Inscription")
+          ),
+        )
+      ],
+    );
+  }
+
+
 }
