@@ -1,10 +1,19 @@
+import 'dart:js_interop';
+
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firstbd233/controller/firebase_helper.dart';
 import 'package:firstbd233/controller/my_animation.dart';
+import 'package:firstbd233/firebase_options.dart';
 import 'package:firstbd233/view/my_background.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -43,6 +52,10 @@ class _MyHomePageState extends State<MyHomePage> {
   PageController page = PageController();
   int position = 0;
   bool eyeOpen = true;
+  TextEditingController nom = TextEditingController();
+  TextEditingController prenom = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController email = TextEditingController();
 
 
   //méthode
@@ -62,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               SizedBox(height: 10,),
               TextField(
+                controller: prenom,
                 obscureText: true,
                 decoration: InputDecoration(
                     filled: true,
@@ -77,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 10,),
               TextField(
+                controller: nom,
                 obscureText: true,
                 decoration: InputDecoration(
                     filled: true,
@@ -91,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 10,),
               TextField(
+                controller: email,
                 obscureText: true,
                 decoration: InputDecoration(
                     filled: true,
@@ -106,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 10,),
               TextField(
+                controller: password,
                 obscureText: eyeOpen,
                 decoration: InputDecoration(
                     filled: true,
@@ -132,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: (){
                     ScaffoldMessenger.of(context).clearSnackBars();
                     //enregistrer dans la base de donnée
+                    FirebaseHelper().inscription(nom.text, prenom.text, email.text, password.text);
                   },
                   child: Text("Enregistrement")
               ),
