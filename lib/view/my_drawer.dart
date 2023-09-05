@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firstbd233/constante/constant.dart';
+import 'package:firstbd233/controller/firebase_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -15,14 +17,56 @@ class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     //variable
-    String nameFile;
-    Uint8List bytesFile;
+    String? nameFile;
+    Uint8List? bytesFile;
 
     //fonctions
-    pickFile(){
-      FilePicker.platform.pickFiles(
-        type: FileType.image
+    pickPhoto(){
+      showDialog(
+          context: context, 
+          builder: (context){
+            return CupertinoAlertDialog(
+              title: Text("Souhaitez envoyer cette image ?"),
+              content: Image.memory(bytesFile!),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                  nameFile = null;
+                  bytesFile = null;
+                  Navigator.pop(context);
+                }, 
+                    child: Text("Annuler")),
+                TextButton(
+                    onPressed: (){
+                      FirebaseHelper().stockage("IMAGES", moi.uid, nameFile!, bytesFile!).then((value) {
+                        setState(() {
+                          moi.avatar = value;
+                        });
+                        Map<String,dynamic> map = {
+                          "AVATAR": moi.avatar
+                        };
+                        FirebaseHelper().updateUser(moi.uid, map);
+                        Navigator.pop(context);
+                      });
+                    }, 
+                    child: Text("Uploader")
+                )
+              ],
+            );
+          }
       );
+      
+    }
+    pickFile() async {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: true
+      );
+      if(result != null){
+        nameFile = result.files.first.name;
+        bytesFile = result.files.first.bytes;
+        pickPhoto();
+      }
     }
     return Padding(
         padding: EdgeInsets.all(10),
