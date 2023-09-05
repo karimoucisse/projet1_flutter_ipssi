@@ -1,4 +1,5 @@
 import 'package:firstbd233/view/my_background.dart';
+import 'package:firstbd233/view/my_drawer.dart';
 import 'package:flutter/material.dart';
 
 class MyDashBord extends StatefulWidget {
@@ -18,6 +19,7 @@ class _MyDashBordState extends State<MyDashBord> {
         color: Colors.purple,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width * 0.6,
+        child: MyDrawer(),
       ),
       appBar: AppBar(
         elevation: 0,
