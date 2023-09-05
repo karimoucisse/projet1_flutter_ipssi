@@ -1,4 +1,5 @@
 import 'package:firstbd233/view/my_background.dart';
+import 'package:firstbd233/view/my_carte.dart';
 import 'package:firstbd233/view/my_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +58,7 @@ class _MyDashBordState extends State<MyDashBord> {
 
   Widget bodyPage(){
     switch(indexPage){
-      case 0 : return Center(child: Text("Afficher carte"));
+      case 0 : return MyCarte();
       case 1 : return Center(child: Text("Afficher favoris"));
       default : return Text("Erreur");
     }
