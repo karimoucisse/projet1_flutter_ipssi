@@ -1,11 +1,17 @@
-import 'dart:js_interop';
+
+
+
+import 'dart:io';
 
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firstbd233/constante/constant.dart';
 import 'package:firstbd233/controller/firebase_helper.dart';
 import 'package:firstbd233/controller/my_animation.dart';
 import 'package:firstbd233/firebase_options.dart';
 import 'package:firstbd233/view/my_background.dart';
+import 'package:firstbd233/view/my_dashboard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -59,6 +65,44 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   //méthode
+
+  popUpError(){
+    showDialog(
+        context: context,
+        builder: (context){
+          if(Platform.isIOS){
+            return CupertinoAlertDialog(
+              title: Text("Erreur"),
+              content: Text("Il y a erreur de saisie"),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: Text("Ok")
+                ),
+              ],
+            );
+
+          }
+          else
+            {
+              return AlertDialog(
+                title: Text("Erreur"),
+                content: Text("Il y a erreur de saisie"),
+                actions: [
+                  TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      child: Text("Ok")
+                  ),
+                ],
+              );
+            }
+        }
+    );
+  }
   SnackBar barAction(){
     return SnackBar(
       backgroundColor: Colors.purple,
@@ -76,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 10,),
               TextField(
                 controller: prenom,
-                obscureText: true,
+
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -92,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 10,),
               TextField(
                 controller: nom,
-                obscureText: true,
+
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -107,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 10,),
               TextField(
                 controller: email,
-                obscureText: true,
+
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -149,7 +193,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: (){
                     ScaffoldMessenger.of(context).clearSnackBars();
                     //enregistrer dans la base de donnée
-                    FirebaseHelper().inscription(nom.text, prenom.text, email.text, password.text);
+                    FirebaseHelper().inscription(nom.text, prenom.text, email.text, password.text).then((value){
+                      setState(() {
+                        moi = value;
+                      });
+                      //naviguer vers la nouvelle page
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context){
+                            return MyDashBord();
+                          }
+                      ));
+                    }).catchError((onError){
+                      popUpError();
+                    });
                   },
                   child: Text("Enregistrement")
               ),
@@ -225,6 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MyAnimationWidget(
           duree: 1,
           child: TextField(
+            controller: email,
             decoration: InputDecoration(
               hintText: "Entrer votre mail",
               prefixIcon: Icon(Icons.mail),
@@ -240,6 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MyAnimationWidget(
           duree: 2,
           child: TextField(
+            controller: password,
             obscureText: eyeOpen,
             decoration: InputDecoration(
                 filled: true,
@@ -267,6 +325,21 @@ class _MyHomePageState extends State<MyHomePage> {
           duree: 3,
           child: ElevatedButton(
               onPressed: (){
+                FirebaseHelper().connexion(email.text, password.text).then((value){
+                  setState(() {
+                    moi = value;
+
+                  });
+                  //naviguer vers la nouvelle page
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context){
+                        return MyDashBord();
+                      }
+                  ));
+                }).catchError((onError){
+                  print(onError.toString());
+                   popUpError();
+                });
 
               },
               child: Text("Connexion")
