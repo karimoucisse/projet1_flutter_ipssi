@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firstbd233/constante/constant.dart';
 import 'package:firstbd233/controller/firebase_helper.dart';
 import 'package:firstbd233/controller/my_animation.dart';
+import 'package:firstbd233/controller/permission_photo.dart';
 import 'package:firstbd233/firebase_options.dart';
 import 'package:firstbd233/view/my_background.dart';
 import 'package:firstbd233/view/my_dashboard.dart';
@@ -20,6 +21,7 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  PermissionPhoto().init();
   runApp(const MyApp());
 }
 
