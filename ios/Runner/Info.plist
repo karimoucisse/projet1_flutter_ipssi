@@ -11,6 +11,8 @@
 	<string>Cette app souhaite accéder à votre position</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Cette app souhaite accéder à votre position</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>app </string>
 	<key>CFBundleDisplayName</key>
 	<string>Firstbd233</string>
 	<key>CFBundleExecutable</key>

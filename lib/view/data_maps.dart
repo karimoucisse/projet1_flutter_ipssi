@@ -17,6 +17,15 @@ class _MyDataMapsState extends State<MyDataMaps> {
   Completer<GoogleMapController> completer = Completer();
   late CameraPosition camera;
 
+  Set<Marker> markers = {
+    Marker(
+        markerId: MarkerId("kjxlvk"),
+      position: LatLng(48.85341,2.3488)
+
+    ),
+
+  };
+
 
   @override
   void initState() {
@@ -27,8 +36,13 @@ class _MyDataMapsState extends State<MyDataMaps> {
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
+      markers: markers,
+      myLocationButtonEnabled: true,
+        myLocationEnabled: true,
         initialCameraPosition: camera,
-      onMapCreated: (mapsController){
+      onMapCreated: (mapsController) async {
+        String newStyle = await DefaultAssetBundle.of(context).loadString("lib/newstylemaps.json");
+        mapsController.setMapStyle(newStyle);
           completer.complete(mapsController);
       },
     );

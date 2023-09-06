@@ -16,11 +16,7 @@ class _MyCarteState extends State<MyCarte> {
     return FutureBuilder<Position>(
         future: PermissionGPS().init(),
         builder: (context,resultat){
-          if(resultat.connectionState == ConnectionState.waiting){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+
           if(resultat.data == null){
             return Center(
               child: Text("Vous n'avez pas accès à la carte"),
@@ -28,8 +24,15 @@ class _MyCarteState extends State<MyCarte> {
           }
           else
             {
-              Position coordonne = resultat.data!;
-              return MyDataMaps(coordonnee: coordonne,);
+              if(resultat.connectionState == ConnectionState.waiting){
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              else {
+                Position coordonne = resultat.data!;
+                return MyDataMaps(coordonnee: coordonne,);
+              }
             }
         }
     );
