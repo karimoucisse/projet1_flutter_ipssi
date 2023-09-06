@@ -1,3 +1,4 @@
+import 'package:firstbd233/view/liste_personne.dart';
 import 'package:firstbd233/view/my_background.dart';
 import 'package:firstbd233/view/my_carte.dart';
 import 'package:firstbd233/view/my_drawer.dart';
@@ -41,6 +42,10 @@ class _MyDashBordState extends State<MyDashBord> {
             label: "Carte"
           ),
           BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "Personnes"
+          ),
+          BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
               label: "Favoris"
           ),
@@ -59,7 +64,8 @@ class _MyDashBordState extends State<MyDashBord> {
   Widget bodyPage(){
     switch(indexPage){
       case 0 : return MyCarte();
-      case 1 : return Center(child: Text("Afficher favoris"));
+      case 1 : return ListPersonne();
+      case 2 : return Center(child: Text("Afficher favoris"));
       default : return Text("Erreur");
     }
   }
